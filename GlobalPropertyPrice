@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Global Property vs GDP Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-50 font-sans">
+
+    <nav class="bg-blue-700 p-6 text-white shadow-lg">
+        <div class="container mx-auto">
+            <h1 class="text-2xl font-bold">RealEstate-GDP Tracker 2026</h1>
+            <p class="text-blue-100 text-sm">Comparing Top 10 GDP per Capita Nations</p>
+        </div>
+    </nav>
+
+    <main class="container mx-auto py-10 px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-semibold mb-4 text-slate-800">Property Price vs. GDP Correlation</h2>
+                <div class="relative h-[400px]">
+                    <canvas id="propertyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-semibold mb-4 text-slate-800">Top Insights</h2>
+                <div class="space-y-4">
+                    <div class="p-4 bg-orange-50 border-l-4 border-orange-400">
+                        <p class="text-sm text-orange-800 font-bold uppercase tracking-wider">Most Expensive</p>
+                        <p class="text-2xl font-black text-orange-900">Singapore</p>
+                        <p class="text-xs text-orange-700 mt-1">$32,500 / m²</p>
+                    </div>
+                    <div class="p-4 bg-green-50 border-l-4 border-green-400">
+                        <p class="text-sm text-green-800 font-bold uppercase tracking-wider">Best Affordability Index</p>
+                        <p class="text-2xl font-black text-green-900">Ireland</p>
+                        <p class="text-xs text-green-700 mt-1">High GDP vs Moderate Property Costs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <table class="w-full text-left">
+                <thead class="bg-slate-100 border-b border-slate-200">
+                    <tr>
+                        <th class="p-4 font-semibold text-slate-700 text-sm">City</th>
+                        <th class="p-4 font-semibold text-slate-700 text-sm">Country</th>
+                        <th class="p-4 font-semibold text-slate-700 text-sm">GDP per Capita</th>
+                        <th class="p-4 font-semibold text-slate-700 text-sm">Price / m² (USD)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody" class="divide-y divide-slate-100">
+                    </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        const cityData = [
+            { city: "Luxembourg City", country: "Luxembourg", gdp: 146000, price: 17200 },
+            { city: "Dublin", country: "Ireland", gdp: 129000, price: 8650 },
+            { city: "Zurich", country: "Switzerland", gdp: 118000, price: 21400 },
+            { city: "Reykjavik", country: "Iceland", gdp: 108000, price: 6700 },
+            { city: "Singapore", country: "Singapore", gdp: 99000, price: 32500 },
+            { city: "New York City", country: "USA", gdp: 93000, price: 16800 },
+            { city: "Oslo", country: "Norway", gdp: 91500, price: 9400 },
+            { city: "Copenhagen", country: "Denmark", gdp: 82000, price: 7950 },
+            { city: "Amsterdam", country: "Netherlands", gdp: 73000, price: 8600 },
+            { city: "Sydney", country: "Australia", gdp: 66500, price: 11800 }
+        ];
+
+        // Populate Table
+        const tableBody = document.getElementById('tableBody');
+        cityData.forEach(item => {
+            tableBody.innerHTML += `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 font-medium text-slate-900">${item.city}</td>
+                    <td class="p-4 text-slate-600">${item.country}</td>
+                    <td class="p-4 text-slate-600">$${item.gdp.toLocaleString()}</td>
+                    <td class="p-4 text-blue-600 font-bold">$${item.price.toLocaleString()}</td>
+                </tr>
+            `;
+        });
+
+        // Initialize Chart
+        const ctx = document.getElementById('propertyChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: cityData.map(d => d.city),
+                datasets: [{
+                    label: 'Property Price per m² (USD)',
+                    data: cityData.map(d => d.price),
+                    backgroundColor: 'rgba(37, 99, 235, 0.7)',
+                    borderColor: 'rgb(37, 99, 235)',
+                    borderWidth: 1,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, grid: { display: false } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
